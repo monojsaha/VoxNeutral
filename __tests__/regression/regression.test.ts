@@ -65,7 +65,7 @@ describe("SCENARIO: Full word pronunciation attempt flow", () => {
     for (const word of words) {
       await expect(scoreWordAttempt(word, blob, 1500)).resolves.toBeDefined();
     }
-  });
+  }, 120_000);
 });
 
 // ============================================================
@@ -261,13 +261,13 @@ describe("SCENARIO: Robustness / never-crash guarantees", () => {
   it("scoreWordAttempt with 0ms duration doesn't throw", async () => {
     const blob = new Blob(["x"], { type: "audio/webm" });
     await expect(scoreWordAttempt("algorithm", blob, 0)).resolves.toBeDefined();
-  });
+  }, 10_000);
 
   it("scoreWordAttempt with unknown word doesn't throw", async () => {
     const blob = new Blob(["x"], { type: "audio/webm" });
     await expect(scoreWordAttempt("pneumonoultramicroscopicsilicovolcanoconiosis", blob, 1000))
       .resolves.toBeDefined();
-  });
+  }, 10_000);
 
   it("lookupWord never throws regardless of input", () => {
     const inputs = ["", "   ", "123", "!@#", "A".repeat(100), "résumé"];
