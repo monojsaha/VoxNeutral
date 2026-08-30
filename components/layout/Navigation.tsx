@@ -10,6 +10,7 @@ import {
   Briefcase,
   Brain,
   Settings,
+  FileText,
 } from "lucide-react";
 
 interface NavItem {
@@ -22,6 +23,7 @@ const NAV_ITEMS: NavItem[] = [
   { href: "/", label: "Home", icon: Home },
   { href: "/practice", label: "Practice", icon: Mic },
   { href: "/word-lab", label: "Word Lab", icon: BookOpen },
+  { href: "/paragraph", label: "Paragraphs", icon: FileText },
   { href: "/progress", label: "Progress", icon: TrendingUp },
   { href: "/boardroom", label: "Boardroom", icon: Briefcase },
   { href: "/coach", label: "Coach", icon: Brain },

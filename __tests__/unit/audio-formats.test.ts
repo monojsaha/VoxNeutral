@@ -53,7 +53,7 @@ describe("detectSupportedMimeType", () => {
 
   it("returns a non-empty string", () => {
     const mime = detectSupportedMimeType();
-    expect(mime.length).toBeGreaterThan(0);
+    expect(mime!.length).toBeGreaterThan(0);
   });
 
   it("returns a valid audio mime type", () => {

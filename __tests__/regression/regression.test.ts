@@ -153,7 +153,7 @@ describe("SCENARIO: Audio format detection pipeline", () => {
   it("detectSupportedMimeType returns a usable audio format", () => {
     const mime = detectSupportedMimeType();
     expect(mime).toMatch(/^audio\//);
-    const ext = getFileExtension(mime);
+    const ext = getFileExtension(mime!);
     expect(["webm", "ogg", "mp4"]).toContain(ext);
   });
 

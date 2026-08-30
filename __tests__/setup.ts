@@ -57,9 +57,10 @@ beforeAll(() => {
   };
 
   const MockMediaRecorder = vi.fn().mockImplementation(() => mockMediaRecorder);
-  MockMediaRecorder.isTypeSupported = vi.fn().mockImplementation((mime: string) =>
-    ["audio/webm;codecs=opus", "audio/webm", "audio/ogg;codecs=opus"].includes(mime)
-  );
+  (MockMediaRecorder as unknown as { isTypeSupported: (mime: string) => boolean }).isTypeSupported =
+    vi.fn().mockImplementation((mime: string) =>
+      ["audio/webm;codecs=opus", "audio/webm", "audio/ogg;codecs=opus"].includes(mime)
+    );
 
   Object.defineProperty(window, "MediaRecorder", {
     value: MockMediaRecorder,
