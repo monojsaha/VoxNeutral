@@ -30,7 +30,7 @@ export function getFileExtension(mimeType: string): string {
   if (mimeType.startsWith("audio/ogg")) return "ogg";
   if (mimeType.startsWith("audio/mp4")) return "mp4";
   if (mimeType.startsWith("audio/wav")) return "wav";
-  return "audio";
+  return "webm";
 }
 
 export function isRecordingSupported(): boolean {

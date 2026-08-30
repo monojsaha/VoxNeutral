@@ -13,6 +13,8 @@ export const DEFAULT_WORD_WEIGHTS: ScoringWeights = {
 };
 
 export function validateWeights(weights: ScoringWeights): boolean {
-  const total = weights.pronunciation + weights.wordStress + weights.timing + weights.clarity;
+  const values = [weights.pronunciation, weights.wordStress, weights.timing, weights.clarity];
+  if (values.some((v) => v < 0)) return false;
+  const total = values.reduce((a, b) => a + b, 0);
   return Math.abs(total - 1.0) < 0.001;
 }

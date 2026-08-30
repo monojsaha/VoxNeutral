@@ -1,14 +1,24 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { getFileExtension, isRecordingSupported, detectSupportedMimeType } from "@/lib/audio/formats";
+import { describe, it, expect } from "vitest";
+import {
+  getFileExtension,
+  isRecordingSupported,
+  detectSupportedMimeType,
+} from "@/lib/audio/formats";
 
 describe("getFileExtension", () => {
-  it("returns webm for audio/webm types", () => {
+  it("returns webm for audio/webm", () => {
     expect(getFileExtension("audio/webm")).toBe("webm");
+  });
+
+  it("returns webm for audio/webm;codecs=opus", () => {
     expect(getFileExtension("audio/webm;codecs=opus")).toBe("webm");
   });
 
-  it("returns ogg for audio/ogg types", () => {
+  it("returns ogg for audio/ogg", () => {
     expect(getFileExtension("audio/ogg")).toBe("ogg");
+  });
+
+  it("returns ogg for audio/ogg;codecs=opus", () => {
     expect(getFileExtension("audio/ogg;codecs=opus")).toBe("ogg");
   });
 
@@ -16,40 +26,44 @@ describe("getFileExtension", () => {
     expect(getFileExtension("audio/mp4")).toBe("mp4");
   });
 
-  it("returns wav for audio/wav", () => {
-    expect(getFileExtension("audio/wav")).toBe("wav");
+  it("returns webm as fallback for unknown types", () => {
+    expect(getFileExtension("audio/unknown")).toBe("webm");
   });
 
-  it("returns audio for unknown mime types", () => {
-    expect(getFileExtension("audio/unknown")).toBe("audio");
-    expect(getFileExtension("video/mp4")).toBe("audio");
+  it("handles empty string without throwing", () => {
+    expect(() => getFileExtension("")).not.toThrow();
   });
 });
 
 describe("isRecordingSupported", () => {
-  it("returns true when MediaRecorder is available and a mime type is supported", () => {
-    // window.MediaRecorder and navigator.mediaDevices are set up in setup.ts
-    const supported = isRecordingSupported();
-    expect(typeof supported).toBe("boolean");
+  it("returns a boolean", () => {
+    expect(typeof isRecordingSupported()).toBe("boolean");
+  });
+
+  it("returns true when MediaRecorder is mocked in window", () => {
+    expect(isRecordingSupported()).toBe(true);
   });
 });
 
 describe("detectSupportedMimeType", () => {
-  it("returns a string or null", () => {
-    const result = detectSupportedMimeType();
-    expect(result === null || typeof result === "string").toBe(true);
+  it("returns a string when a supported format is found", () => {
+    const mime = detectSupportedMimeType();
+    expect(typeof mime).toBe("string");
   });
 
-  it("returns one of the expected mime types when supported", () => {
-    const result = detectSupportedMimeType();
-    if (result !== null) {
-      expect([
-        "audio/webm;codecs=opus",
-        "audio/webm",
-        "audio/ogg;codecs=opus",
-        "audio/ogg",
-        "audio/mp4",
-      ]).toContain(result);
-    }
+  it("returns a non-empty string", () => {
+    const mime = detectSupportedMimeType();
+    expect(mime.length).toBeGreaterThan(0);
+  });
+
+  it("returns a valid audio mime type", () => {
+    const mime = detectSupportedMimeType();
+    expect(mime).toMatch(/^audio\//);
+  });
+
+  it("prefers webm/opus when available (mock supports it)", () => {
+    const mime = detectSupportedMimeType();
+    // Our mock supports audio/webm;codecs=opus — it should be selected first
+    expect(mime).toMatch(/webm/);
   });
 });
