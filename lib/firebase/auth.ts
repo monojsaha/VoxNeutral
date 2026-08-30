@@ -1,0 +1,35 @@
+"use client";
+
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  signOut as firebaseSignOut,
+  onAuthStateChanged,
+  type User,
+} from "firebase/auth";
+import { app } from "./config";
+
+const auth = getAuth(app);
+
+export async function signIn(email: string, password: string): Promise<User> {
+  const credential = await signInWithEmailAndPassword(auth, email, password);
+  return credential.user;
+}
+
+export async function signUp(email: string, password: string): Promise<User> {
+  const credential = await createUserWithEmailAndPassword(auth, email, password);
+  return credential.user;
+}
+
+export async function signOut(): Promise<void> {
+  await firebaseSignOut(auth);
+}
+
+export function getCurrentUser(): User | null {
+  return auth.currentUser;
+}
+
+export function onAuthChange(callback: (user: User | null) => void): () => void {
+  return onAuthStateChanged(auth, callback);
+}

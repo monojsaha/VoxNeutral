@@ -1,0 +1,28 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Public content collections — authenticated read only
+    match /words/{document=**} {
+      allow read: if request.auth != null;
+      allow write: if false;
+    }
+    match /minimal_pairs/{document=**} {
+      allow read: if request.auth != null;
+      allow write: if false;
+    }
+    match /sentences/{document=**} {
+      allow read: if request.auth != null;
+      allow write: if false;
+    }
+    match /paragraphs/{document=**} {
+      allow read: if request.auth != null;
+      allow write: if false;
+    }
+
+    // User data — each user can only access their own documents
+    match /users/{uid}/{document=**} {
+      allow read, write: if request.auth != null && request.auth.uid == uid;
+    }
+  }
+}
